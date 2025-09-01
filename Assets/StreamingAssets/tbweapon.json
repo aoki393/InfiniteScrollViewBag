@@ -1,0 +1,182 @@
+[
+  {
+    "id": 1001,
+    "name": "Arrow",
+    "name_cn": "箭矢",
+    "atk": 10,
+    "crit": 20,
+    "desc": "一支轻巧而锋利的远程武器，木质箭杆搭配金属箭镞，能在弓弦的推动下精准命中目标。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Arrow"
+  },
+  {
+    "id": 1002,
+    "name": "Axe",
+    "name_cn": "斧头",
+    "atk": 12,
+    "crit": 22,
+    "desc": "一把沉重的近战武器，锋利的金属斧刃能轻易劈开木头与敌人。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Axe"
+  },
+  {
+    "id": 1003,
+    "name": "Bow",
+    "name_cn": "长弓",
+    "atk": 14,
+    "crit": 24,
+    "desc": "一把优雅的远程武器，木制弓身与紧绷的弓弦能将箭矢射向远方。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Bow"
+  },
+  {
+    "id": 1004,
+    "name": "Emerald Staff",
+    "name_cn": "翡翠法杖",
+    "atk": 16,
+    "crit": 26,
+    "desc": "镶嵌翠绿宝石的法杖，蕴含着自然的魔力，能召唤生机与治愈之力。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Emerald Staff"
+  },
+  {
+    "id": 1005,
+    "name": "Golden Sword",
+    "name_cn": "黄金剑",
+    "atk": 18,
+    "crit": 28,
+    "desc": "闪耀的金色长剑，华贵而锋利，象征荣耀与力量。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Golden Sword"
+  },
+  {
+    "id": 1006,
+    "name": "Hammer",
+    "name_cn": "战锤",
+    "atk": 20,
+    "crit": 30,
+    "desc": "沉重的钝器，坚固的金属锤头能粉碎一切障碍。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Hammer"
+  },
+  {
+    "id": 1007,
+    "name": "Iron Shield",
+    "name_cn": "铁盾",
+    "atk": 22,
+    "crit": 32,
+    "desc": "坚固的铁制盾牌，可靠的防御装备，能抵挡锋利的攻击。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Iron Shield"
+  },
+  {
+    "id": 1008,
+    "name": "Iron Sword",
+    "name_cn": "铁剑",
+    "atk": 24,
+    "crit": 34,
+    "desc": "锋利的铁制长剑，平衡的配重使其成为战场上的可靠选择。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Iron Sword"
+  },
+  {
+    "id": 1009,
+    "name": "Knife",
+    "name_cn": "匕首",
+    "atk": 32,
+    "crit": 50,
+    "desc": "轻便的短刃，适合快速挥砍或投掷，是隐秘行动的理想工具。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Knife"
+  },
+  {
+    "id": 1010,
+    "name": "Magic Wand",
+    "name_cn": "魔法杖",
+    "atk": 36,
+    "crit": 53,
+    "desc": "镶嵌魔法宝石的短杖，能引导元素之力释放强大的法术。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Magic Wand"
+  },
+  {
+    "id": 1011,
+    "name": "Pickaxe",
+    "name_cn": "十字镐",
+    "atk": 40,
+    "crit": 56,
+    "desc": "坚固耐用的采矿工具，尖锐的镐头能凿开坚硬的岩石与矿物。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Pickaxe"
+  },
+  {
+    "id": 1012,
+    "name": "Ruby Staff",
+    "name_cn": "红宝石法杖",
+    "atk": 44,
+    "crit": 59,
+    "desc": "镶嵌红宝石的法杖，涌动着火焰之力，能释放炽热的魔法能量。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Ruby Staff"
+  },
+  {
+    "id": 1013,
+    "name": "Sapphire Staff",
+    "name_cn": "蓝宝石法杖",
+    "atk": 48,
+    "crit": 62,
+    "desc": "镶嵌蓝宝石的法杖，散发着冰冷的气息，能操控寒霜与水流。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Sapphire Staff"
+  },
+  {
+    "id": 1014,
+    "name": "Shovel",
+    "name_cn": "铁铲",
+    "atk": 52,
+    "crit": 65,
+    "desc": "实用的挖掘工具，宽平的铲头能轻松翻动泥土与沙石。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Shovel"
+  },
+  {
+    "id": 1015,
+    "name": "Silver Sword",
+    "name_cn": "银剑",
+    "atk": 56,
+    "crit": 68,
+    "desc": "银光闪烁的利剑，轻盈而致命，对黑暗生物尤为有效。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Silver Sword"
+  },
+  {
+    "id": 1016,
+    "name": "Topaz Staff",
+    "name_cn": "黄玉法杖",
+    "atk": 60,
+    "crit": 71,
+    "desc": "镶嵌黄宝石的法杖，蕴藏雷电之力，能召唤震击敌人的闪电。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Topaz Staff"
+  },
+  {
+    "id": 1017,
+    "name": "Torch",
+    "name_cn": "火把",
+    "atk": 64,
+    "crit": 74,
+    "desc": "燃烧的火把，提供光亮与温暖，也能暂时驱散黑暗中的威胁。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Torch"
+  },
+  {
+    "id": 1018,
+    "name": "Wooden Shield",
+    "name_cn": "木盾",
+    "atk": 68,
+    "crit": 77,
+    "desc": "轻便的木制盾牌，虽不如金属坚固，但仍能提供基础防护。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Wooden Shield"
+  },
+  {
+    "id": 1019,
+    "name": "Wooden Staff",
+    "name_cn": "木制法杖",
+    "atk": 72,
+    "crit": 80,
+    "desc": "朴素的木质长杖，适合初学者施法，能引导基础魔法能量。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Wooden Staff"
+  },
+  {
+    "id": 1020,
+    "name": "Wooden Sword",
+    "name_cn": "木剑",
+    "atk": 76,
+    "crit": 83,
+    "desc": "简易的木制短剑，轻巧易用，是新手的入门武器。",
+    "icon_path": "PackageXiaoQi/Image/Weapon & Tool/Wooden Sword"
+  }
+]

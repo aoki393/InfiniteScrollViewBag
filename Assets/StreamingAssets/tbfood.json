@@ -1,0 +1,101 @@
+[
+  {
+    "id": 2001,
+    "name": "Apple",
+    "name_cn": "苹果",
+    "hpbuff": 10,
+    "mpbuff": 0,
+    "desc": "鲜脆多汁的甜美果实",
+    "icon_path": "PackageXiaoQi/Image/Food/Apple"
+  },
+  {
+    "id": 2002,
+    "name": "Beer",
+    "name_cn": "啤酒",
+    "hpbuff": 0,
+    "mpbuff": 15,
+    "desc": "麦香浓郁的琥珀色酒液",
+    "icon_path": "PackageXiaoQi/Image/Food/Beer"
+  },
+  {
+    "id": 2003,
+    "name": "Bread",
+    "name_cn": "面包",
+    "hpbuff": 20,
+    "mpbuff": 0,
+    "desc": "松软可口的金黄主食",
+    "icon_path": "PackageXiaoQi/Image/Food/Bread"
+  },
+  {
+    "id": 2004,
+    "name": "Cheese",
+    "name_cn": "奶酪",
+    "hpbuff": 25,
+    "mpbuff": 10,
+    "desc": "醇厚香浓的发酵乳制品",
+    "icon_path": "PackageXiaoQi/Image/Food/Cheese"
+  },
+  {
+    "id": 2005,
+    "name": "Fish Steak",
+    "name_cn": "鱼排",
+    "hpbuff": 30,
+    "mpbuff": 30,
+    "desc": "鲜嫩肥美的海味厚切",
+    "icon_path": "PackageXiaoQi/Image/Food/Fish Steak"
+  },
+  {
+    "id": 2006,
+    "name": "Green Apple",
+    "name_cn": "青苹果",
+    "hpbuff": 5,
+    "mpbuff": 15,
+    "desc": "酸甜爽口的青色果实",
+    "icon_path": "PackageXiaoQi/Image/Food/Green Apple"
+  },
+  {
+    "id": 2007,
+    "name": "Ham",
+    "name_cn": "火腿",
+    "hpbuff": 30,
+    "mpbuff": 10,
+    "desc": "咸香浓郁的烟熏肉片",
+    "icon_path": "PackageXiaoQi/Image/Food/Ham"
+  },
+  {
+    "id": 2008,
+    "name": "Meat",
+    "name_cn": "肉",
+    "hpbuff": 50,
+    "mpbuff": 20,
+    "desc": "新鲜多汁的兽类肉块",
+    "icon_path": "PackageXiaoQi/Image/Food/Meat"
+  },
+  {
+    "id": 2009,
+    "name": "Mushroom",
+    "name_cn": "蘑菇",
+    "hpbuff": 30,
+    "mpbuff": 0,
+    "desc": "伞状鲜美的山林野味",
+    "icon_path": "PackageXiaoQi/Image/Food/Mushroom"
+  },
+  {
+    "id": 2010,
+    "name": "Wine 2",
+    "name_cn": "葡萄酒（陈酿）",
+    "hpbuff": 30,
+    "mpbuff": 40,
+    "desc": "醇香优雅的陈年佳酿",
+    "icon_path": "PackageXiaoQi/Image/Food/Wine 2"
+  },
+  {
+    "id": 2011,
+    "name": "Wine",
+    "name_cn": "葡萄酒",
+    "hpbuff": 20,
+    "mpbuff": 20,
+    "desc": "甘甜芬芳的葡萄美酒",
+    "icon_path": "PackageXiaoQi/Image/Food/Wine"
+  }
+]
