@@ -4,6 +4,7 @@ using UnityEngine;
 
 public interface IPackageItem 
 {
+    int ConfigID { get; }
     string Name { get; }
     string Description { get; }
     string IconPath { get; }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -154,8 +155,10 @@ public class PackageRXController : MonoBehaviour
         // items 为空时，显示背景图
         if (items == null || items.Count == 0)
         {
-            view.bgHaveNothing.gameObject.SetActive(true);
-            
+            view.bgHaveNothing.gameObject.SetActive(true);           
+
+            view.txtTotalNum.text = "";
+
             // 清空当前背包列表
             // currentBagItemlist.Clear();  //如果这里currentBagItemlist还没初始化，Clear会报错
             SetContentHeight(0);
@@ -167,6 +170,16 @@ public class PackageRXController : MonoBehaviour
         else
         {
             view.bgHaveNothing.gameObject.SetActive(false);
+            StringBuilder totalNumStr = new StringBuilder();
+            if (items[0] is PackageFoodItem)
+            {
+                totalNumStr.Append("食物种类总数量: ");
+            }
+            else if (items[0] is PackageWeaponItem)
+            {
+                totalNumStr.Append("武器总数量: ");
+            }
+            view.txtTotalNum.text = totalNumStr.Append(items.Count.ToString()).ToString();
         }
 
         List<IPackageItem> packageItems = new List<IPackageItem>(items.Cast<IPackageItem>().ToList());
@@ -279,17 +292,9 @@ public class PackageRXController : MonoBehaviour
         }
     }
     private void InitXScrollView()
-    {
-        if (view.scrollRect == null)
-        {
-            Debug.LogError("InitXScrollView 的 scrollRect 为空");
-        }
-        if (view.contentRect == null)
-        {
-            Debug.LogError("InitXScrollView 的 contentRect 为空");
-        }
+    {        
         // 设置的可见范围
-        view.BagRect = view.scrollRect.GetComponent<RectTransform>();
+        // view.BagRect = view.scrollRect.GetComponent<RectTransform>();
         viewHeight = view.BagRect.rect.height;
         viewWidth = view.BagRect.rect.width;
 
@@ -391,12 +396,15 @@ public class PackageRXController : MonoBehaviour
     {
         if (isNothing)
         {
+            view.txtConfigID.text = "";
             view.txtName.text = "";
             view.txtDesc.text = "";
             view.txtWeaponQulity.text = "";
             view.txtBuff.text = "";
             return;
         }
+        // 显示选中的物品ConfigID
+        view.txtConfigID.text = "配置表id: "+currentBagItemlist[CurrentSelectIndex].ConfigID.ToString();
         //显示选中的物品Name
         view.txtName.text = currentBagItemlist[CurrentSelectIndex].Name;
         //显示描述

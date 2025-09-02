@@ -85,6 +85,7 @@ public class PackageWeaponItem : IPackageItem
     public string Description => WeaponConfig.desc;
     public string IconPath => WeaponConfig.icon_path;
     public ItemType Type => ItemType.Weapon;
+    public int ConfigID => WeaponConfig.id;
 }
 public enum WeaponQuality
 {

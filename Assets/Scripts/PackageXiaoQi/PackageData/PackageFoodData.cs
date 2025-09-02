@@ -110,11 +110,13 @@ public class PackageFoodItem : IPackageItem
     public string Description => FoodConfig.desc;
     public string IconPath => FoodConfig.icon_path;
     public ItemType Type => ItemType.Food;
+
+    public int ConfigID => FoodConfig.id;
     // public List<PackageFoodItem> SplitByMaxCount(int maxCount)
     // {
     //     List<PackageFoodItem> result = new List<PackageFoodItem>();
     //     int remaining = this.count;
-        
+
     //     while (remaining > 0)
     //     {
     //         int splitCount = Mathf.Min(remaining, maxCount);
@@ -123,7 +125,7 @@ public class PackageFoodItem : IPackageItem
     //         result.Add(newItem);
     //         remaining -= splitCount;
     //     }
-        
+
     //     return result;
     // }
 }
