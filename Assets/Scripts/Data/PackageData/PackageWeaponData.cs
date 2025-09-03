@@ -196,7 +196,7 @@ public class PackageWeaponData
     }
 
     public List<PackageWeaponItem> WeaponList;
-    public void SavePackageWeapon()
+    private void SavePackageWeapon()
     {
         // JsonMgr.Instance.SaveData(this, "PackageWeaponData"); // 这个会保存整个类，导致Json序列化失败
         JsonMgr.Instance.SaveData(WeaponList, "PackageWeaponData");
@@ -217,7 +217,7 @@ public class PackageWeaponData
         SavePackageWeapon();
     }
     // 添加武器
-    public void AddWeapon(WeaponConfigItem weapon, WeaponQuality quality)
+    public void AddOneWeapon(WeaponConfigItem weapon, WeaponQuality quality)
     {
         PackageWeaponItem item = new PackageWeaponItem();
         item.uid = Guid.NewGuid().GetHashCode();
@@ -231,6 +231,11 @@ public class PackageWeaponData
         item.weaponCrit = weapon.crit + UnityEngine.Random.Range(-1 * (int)quality, 2 * (int)quality);
 
         WeaponList.Add(item);
+        SavePackageWeapon();
+    }
+    public void AddSomeWeapon(List<PackageWeaponItem> weapons)
+    {
+        WeaponList.AddRange(weapons);
         SavePackageWeapon();
     }
     // 穿戴武器，暂时先不做这个功能

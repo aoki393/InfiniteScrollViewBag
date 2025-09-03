@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GMPanelController : MonoBehaviour
@@ -83,9 +84,15 @@ public class GMPanelController : MonoBehaviour
             StartCoroutine(CreateEachWeapon()); // 异步调用
             Debug.Log("确认生成每种武器");
         });
-    }   
+    }
     private IEnumerator GetWeapon()
     {
+        // 禁止背包中武器数量超过 114514
+        if (PackageWeaponData.Instance.WeaponList.Count >= 114514)
+        {
+            StartCoroutine(ShowtxtMsg("背包中武器数量不能超过 114514 ！", true));
+            yield break;
+        }
         // List<WeaponConfigItem> weapons = JsonMgr.Instance.LoadData<List<WeaponConfigItem>>("tbweapon");
         // 加载武器配置
         yield return ConfigLoader.LoadConfigData<List<WeaponConfigItem>>("tbweapon");
@@ -93,65 +100,62 @@ public class GMPanelController : MonoBehaviour
 
         if (weapons == null || weapons.Count == 0)
         {
-            // tbweapon配置文件为空
-            view.txtMsg.text = "tbweapon配置文件读取异常 或 文件内容有误";
-            view.MsgArea.SetActive(true);
-            // 延迟关闭消息区域
-            yield return StartCoroutine(CloseMsgArea());
+            StartCoroutine(ShowtxtMsg("tbweapon配置文件读取异常 或 文件内容有误", true));
             yield break;
         }
         int weaponId = int.Parse(view.inputWeaponId.text);
-        string qualitySelcted = view.ddWeaponQuality.options[view.ddWeaponQuality.value].text;
-        WeaponQuality quality;
-        switch (qualitySelcted)
-        {
-            case "传说":
-                quality = WeaponQuality.Legendary;
-                break;
-            case "史诗":
-                quality = WeaponQuality.Epic;
-                break;
-            case "精良":
-                quality = WeaponQuality.Fine;
-                break;
-            case "优秀":
-                quality = WeaponQuality.Good;
-                break;
-            case "普通":
-                quality = WeaponQuality.Common;
-                break;
-            default:
-                Debug.LogWarning("DropDown有问题！选择了无效的武器品质");
-                quality = WeaponQuality.Common;
-                break;
-        }
+
         foreach (WeaponConfigItem weapon in weapons)
         {
             if (weapon.id == weaponId)
             {
                 Debug.Log("武器id有效，名称：" + weapon.name_cn);
+                string qualitySelcted = view.ddWeaponQuality.options[view.ddWeaponQuality.value].text;
+                WeaponQuality quality;
+                switch (qualitySelcted)
+                {
+                    case "传说":
+                        quality = WeaponQuality.Legendary;
+                        break;
+                    case "史诗":
+                        quality = WeaponQuality.Epic;
+                        break;
+                    case "精良":
+                        quality = WeaponQuality.Fine;
+                        break;
+                    case "优秀":
+                        quality = WeaponQuality.Good;
+                        break;
+                    case "普通":
+                        quality = WeaponQuality.Common;
+                        break;
+                    default:
+                        Debug.LogWarning("DropDown有问题！选择了无效的武器品质");
+                        quality = WeaponQuality.Common;
+                        break;
+                }
                 // 将武器存入背包
-                PackageWeaponData.Instance.AddWeapon(weapon, quality);
+                PackageWeaponData.Instance.AddOneWeapon(weapon, quality);
                 // 刷新并跳转到背包Weapon视图
                 // RefreshView(0);
                 RefreshRXView(0);
 
                 // 在GMPanel显示获取信息
-                view.txtMsg.text = $"获得了 {qualitySelcted} {weapon.name_cn}（武器）";
-                view.MsgArea.SetActive(true);
-                // 延迟关闭消息区域
-                yield return StartCoroutine(CloseMsgArea());
+                StartCoroutine(ShowtxtMsg($"获得了 {qualitySelcted} {weapon.name_cn}（武器）"));
                 yield break;
             }
         }
         // 武器id无效
-        view.txtMsg.text = "武器id无效";
-        view.MsgArea.SetActive(true);
-        // 延迟关闭消息区域
-        StartCoroutine(CloseMsgArea());
+        StartCoroutine(ShowtxtMsg("武器id无效", true));
     }
     private IEnumerator GetFood()
     {
+        // 检查输入数量
+        if (!int.TryParse(view.inputFoodNum.text, out int foodNum) || foodNum <= 0)
+        {
+            StartCoroutine(ShowtxtMsg("食物数量必须为正整数！",true));
+            yield break;
+        }
         // List<FoodConfigItem> foods = JsonMgr.Instance.LoadData<List<FoodConfigItem>>("tbfood");
         // 加载食物配置
         yield return ConfigLoader.LoadConfigData<List<FoodConfigItem>>("tbfood");
@@ -160,29 +164,26 @@ public class GMPanelController : MonoBehaviour
         if (foods == null || foods.Count == 0)
         {
             // tbfood配置文件为空
-            view.txtMsg.text = "tbfood配置文件读取异常 或 文件内容有误";
-            view.MsgArea.SetActive(true);
-            // 延迟关闭消息区域
-            yield return StartCoroutine(CloseMsgArea());
+            StartCoroutine(ShowtxtMsg("tbfood配置文件读取异常 或 文件内容有误", true));
             yield break;
         }
 
         int foodId = int.Parse(view.inputFoodId.text);
-        int foodNum = int.Parse(view.inputFoodNum.text);
-        if (foodNum > 999)
-        {
-            view.txtMsg.text = "食物数量不能超过999";
-            view.MsgArea.SetActive(true);
-            // 延迟关闭消息区域
-            yield return StartCoroutine(CloseMsgArea());
-            yield break;
-        }
 
         foreach (FoodConfigItem food in foods)
         {
             if (food.id == foodId)
             {
                 Debug.Log("食物id有效，名称：" + food.name_cn);
+
+                // 检查该食物的已有数量（限制该食物的数量不能超过999个
+                var foodExistCount = PackageFoodData.Instance.FoodList.Find(x => x.id == foodId)?.count ?? 0;
+                if (foodExistCount+foodNum > 999)
+                {
+                    StartCoroutine(ShowtxtMsg("背包中一种食物的数量不能超过999个", true));
+                    yield break;
+                }
+
                 // 将食物存入背包
                 PackageFoodData.Instance.AddFood(food, foodNum);
                 // 刷新并跳转到背包Food视图
@@ -190,48 +191,43 @@ public class GMPanelController : MonoBehaviour
                 RefreshRXView(1);
 
                 // 在GMPanel显示获取信息
-                view.txtMsg.text = $"获得了 {food.name_cn} {foodNum} 个";
-                view.MsgArea.SetActive(true);
-                // 延迟关闭消息区域
-                yield return StartCoroutine(CloseMsgArea());
+                yield return StartCoroutine(ShowtxtMsg($"获得了 {food.name_cn} {foodNum} 个"));
                 yield break;
             }
         }
-        // 道具id无效
-        view.txtMsg.text = "食物id无效";
-        view.MsgArea.SetActive(true);
-        // 延迟关闭消息区域
-        StartCoroutine(CloseMsgArea());
+        // 食物id无效
+        yield return StartCoroutine(ShowtxtMsg("食物id无效", true));
+
     }
-    private IEnumerator CreateSomeWeapons()
+    public IEnumerator CreateSomeWeapons()
     {
         // 验证输入数量
         if (!int.TryParse(view.WeaponCreateNum.text, out int weaponNum) || weaponNum <= 0)
         {
-            view.txtMsg.text = "武器数量必须为正整数";
-            view.MsgArea.SetActive(true);
-            yield return StartCoroutine(CloseMsgArea());
+            StartCoroutine(ShowtxtMsg("武器数量必须为正整数！",true));
             yield break;
         }
-        
+        // 禁止背包中武器数量超过 114514
+        if (weaponNum + PackageWeaponData.Instance.WeaponList.Count >= 114515)
+        {
+            StartCoroutine(ShowtxtMsg("背包中武器数量不能超过 114514 ！",true));
+            yield break;
+        }
         // 加载武器配置
         yield return ConfigLoader.LoadConfigData<List<WeaponConfigItem>>("tbweapon");
         var weaponConfigs = ConfigLoader.Result as List<WeaponConfigItem>;
-
         // 验证配置
         if (weaponConfigs == null || weaponConfigs.Count == 0)
         {
-            view.txtMsg.text = "tbweapon配置文件读取异常 或 文件内容有误";
-            view.MsgArea.SetActive(true);
-            // 延迟关闭消息区域
-            yield return StartCoroutine(CloseMsgArea()); // 等待消息关闭
+            StartCoroutine(ShowtxtMsg("tbweapon配置文件读取异常 或 文件内容有误", true));
             yield break; // 终止协程          
         }
+
         // 处理品质选择
         bool randomQuality = false;
-        string qualitySelcted = view.ddCreateType.options[view.ddCreateType.value].text;
+        string qualitySelected = view.ddCreateType.options[view.ddCreateType.value].text;
         WeaponQuality fixedQuality = WeaponQuality.Common;
-        switch (qualitySelcted)
+        switch (qualitySelected)
         {
             case "随机品质":
                 randomQuality = true;
@@ -251,35 +247,48 @@ public class GMPanelController : MonoBehaviour
             case "普通":
                 fixedQuality = WeaponQuality.Common;
                 break;
-            default:
-                Debug.LogWarning("DropDown有问题！选择了无效的武器品质");
-                fixedQuality = WeaponQuality.Common;
-                break;
         }
+
         // 生成武器
-        for (int i = 0; i < int.Parse(view.WeaponCreateNum.text); i++)
+
+        var weaponsToAdd = new List<PackageWeaponItem>();
+
+        for (int i = 0; i < weaponNum; i++)
         {
-            // 随机选择武器配置
             int configIndex = UnityEngine.Random.Range(0, weaponConfigs.Count);
             WeaponConfigItem config = weaponConfigs[configIndex];
 
-            // 确定品质
             WeaponQuality quality = randomQuality
-                ? (WeaponQuality)UnityEngine.Random.Range(1, 6) // 1-5对应枚举值
+                ? (WeaponQuality)UnityEngine.Random.Range(1, 6)
                 : fixedQuality;
 
-            // 添加到背包
-            PackageWeaponData.Instance.AddWeapon(config, quality);
-        }
-        // 刷新并跳转到背包Weapon视图
-        // RefreshView(0);
-        RefreshRXView(0);
+            // 先收集到临时列表，不立即保存
+            PackageWeaponItem item = new PackageWeaponItem
+            {
+                uid = Guid.NewGuid().GetHashCode(),
+                isEquipped = false,
+                quality = quality,
+                WeaponConfig = config,
+                weaponAtk = config.atk + UnityEngine.Random.Range(-2 * (int)quality, 3 * (int)quality),
+                weaponCrit = config.crit + UnityEngine.Random.Range(-1 * (int)quality, 2 * (int)quality)
+            };
 
-        // 在GMPanel显示获取信息
-        view.txtMsg.text = $"成功生成 {view.WeaponCreateNum.text} 把武器";
-        view.MsgArea.SetActive(true);
-        // 延迟关闭消息区域
-        yield return StartCoroutine(CloseMsgArea());
+            weaponsToAdd.Add(item);
+
+            // 每1000个 yield 一下避免卡死
+            if ((i + 1) % 1000 == 0)
+            {
+                Debug.Log($"已生成 {i + 1} 把武器");
+                yield return null;
+            }
+        }
+
+        // 批量添加到数据层
+        PackageWeaponData.Instance.AddSomeWeapon(weaponsToAdd);
+        Debug.Log($"批量生成 {weaponNum} 把武器完成");
+
+        RefreshRXView(0);
+        StartCoroutine(ShowtxtMsg($"成功批量生成{weaponNum}把武器！"));
     }
     private void ClearWeaponData()
     {
@@ -288,12 +297,7 @@ public class GMPanelController : MonoBehaviour
         // RefreshView(0);
         RefreshRXView(0);
 
-        view.txtMsg.text = "已清空背包中的武器";
-        view.MsgArea.SetActive(true);
-        // 延迟关闭消息区域
-        StartCoroutine(CloseMsgArea());
-
-        Debug.Log("已清空背包中的武器");
+        StartCoroutine(ShowtxtMsg("已清空背包中的武器"));
     }
     private void ClearFoodData()
     {
@@ -302,12 +306,7 @@ public class GMPanelController : MonoBehaviour
         // RefreshView(1);
         RefreshRXView(1);
 
-        view.txtMsg.text = "已清空背包中的食物";
-        view.MsgArea.SetActive(true);
-        // 延迟关闭消息区域
-        StartCoroutine(CloseMsgArea());
-
-        Debug.Log("已清空背包中的食物");
+        StartCoroutine(ShowtxtMsg("已清空背包中的食物"));
     }
     private IEnumerator CreateEachWeapon()
     {
@@ -317,25 +316,24 @@ public class GMPanelController : MonoBehaviour
         // 验证配置
         if (weaponConfigs == null || weaponConfigs.Count == 0)
         {
-            view.txtMsg.text = "tbweapon配置文件读取异常 或 文件内容有误";
-            view.MsgArea.SetActive(true);
-            // 延迟关闭消息区域
-            yield return StartCoroutine(CloseMsgArea()); // 等待消息关闭
+            StartCoroutine(ShowtxtMsg("tbweapon配置文件读取异常 或 文件内容有误", true));
             yield break; // 终止协程          
         }
         // 生成武器
         foreach (WeaponConfigItem weapon in weaponConfigs)
         {
-            PackageWeaponData.Instance.AddWeapon(weapon, WeaponQuality.Common);
+            // 检查背包中武器数量是否会超过 114514 
+            if (PackageWeaponData.Instance.WeaponList.Count + 20 > 114514) // 读配置表数量会有点麻烦，直接硬编码了，目前配置里一共20种weapon
+            {
+                StartCoroutine(ShowtxtMsg("背包中武器数量不能超过 114514 ！", true));
+                yield break;
+            }
+            PackageWeaponData.Instance.AddOneWeapon(weapon, WeaponQuality.Common);
         }
         // 刷新并跳转到背包Weapon视图
         RefreshRXView(0);
 
-        // 在GMPanel显示获取信息
-        view.txtMsg.text = $"成功生成 {weaponConfigs.Count} 把武器";
-        view.MsgArea.SetActive(true);
-        // 延迟关闭消息区域
-        yield return StartCoroutine(CloseMsgArea());
+        StartCoroutine(ShowtxtMsg($"成功生成 {weaponConfigs.Count} 把武器"));
     }
     /*
         食物配置表中每种生成1个
@@ -348,11 +346,23 @@ public class GMPanelController : MonoBehaviour
         // 验证配置
         if (foodConfigs == null || foodConfigs.Count == 0)
         {
-            view.txtMsg.text = "tbfood配置文件读取异常 或 文件内容有误";
-            view.MsgArea.SetActive(true);
-            // 延迟关闭消息区域
-            yield return StartCoroutine(CloseMsgArea()); // 等待消息关闭
+            StartCoroutine(ShowtxtMsg("tbfood配置文件读取异常 或 文件内容有误！", true));
             yield break; // 终止协程          
+        }
+
+        // 检查背包中是否有食物数量达到 999 
+        foreach (FoodConfigItem food in foodConfigs)
+        {
+            // 检查该食物的已有数量（限制该食物的数量不能超过999个
+            // var foodExistCount = PackageFoodData.Instance.FoodList.Find(x => x.id == food.id)?.count ?? 0;
+            // 等效于以下传统写法
+            var hasfood = PackageFoodData.Instance.FoodList.Find(x => x.id == food.id);
+            var foodExistCount = (hasfood != null) ? hasfood.count : 0;
+            if (foodExistCount >= 999)
+            {
+                StartCoroutine(ShowtxtMsg($"{food.name_cn} 数量已达到999个！",true));
+                yield break;
+            }
         }
 
         // 生成食物
@@ -364,10 +374,7 @@ public class GMPanelController : MonoBehaviour
         RefreshRXView(1);
 
         // 在GMPanel显示获取信息
-        view.txtMsg.text = $"成功生成 {foodConfigs.Count} 个食物";
-        view.MsgArea.SetActive(true);
-        // 延迟关闭消息区域
-        yield return StartCoroutine(CloseMsgArea());
+        StartCoroutine(ShowtxtMsg($"成功生成 {foodConfigs.Count} 个食物"));
     }
 
     private void RefreshRXView(int tabIndex)
@@ -414,6 +421,20 @@ public class GMPanelController : MonoBehaviour
     {
         yield return new WaitForSeconds(3);
         view.MsgArea.SetActive(false);
+    }
+    IEnumerator ShowtxtMsg(string msg, bool isWarning = false)
+    {
+        view.txtMsg.text = msg;
+        if (isWarning)
+        {
+            view.txtMsg.color = Color.red;
+        }
+        else
+        {
+            view.txtMsg.color = Color.white;
+        }
+        view.MsgArea.SetActive(true);
+        yield return StartCoroutine(CloseMsgArea());
     }
 }
 

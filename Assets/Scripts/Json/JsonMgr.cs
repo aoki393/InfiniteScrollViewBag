@@ -132,7 +132,7 @@ public class JsonMgr
         {
             try
             {
-                result = JsonUtility.FromJson<T>(json);
+                result = JsonMapper.ToObject<T>(json);
                 parseCompleted = true;
                 onProgress?.Invoke(1f);
             }
@@ -216,7 +216,7 @@ public class JsonMgr
     // 保存方法（可选异步）
     public IEnumerator SaveDataAsync(object data, string fileName, Action<bool> onComplete = null)
     {
-        string json = JsonUtility.ToJson(data);
+        string json = JsonMapper.ToJson(data);
         string path = GetFilePath(fileName);
 
         Task<bool> saveTask = Task.Run(() =>

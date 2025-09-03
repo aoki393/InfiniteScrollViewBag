@@ -49,11 +49,9 @@ public class BagItemVC : MonoBehaviour//, IPointerClickHandler
         else if (item is PackageFoodItem food)
         {
             this.foodItem = food;
-            this.weaponItem = null; // 清除weaponItem引用
-                                    // 显示数量，但不超过99
-            int displayCount = Mathf.Min(food.count, 99);
-            count.text = displayCount.ToString();
-            count.gameObject.SetActive(displayCount > 0);
+            this.weaponItem = null; // 清除weaponItem引用                                    
+            count.text = food.count.ToString();
+            count.gameObject.SetActive(true);
         }
 
         gameObject.SetActive(true);
