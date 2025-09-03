@@ -8,6 +8,10 @@ using UnityEngine.UI;
 
 public class GameMgr : MonoBehaviour
 {
+    [Header("预加载设置")]
+    public bool preloadWeaponData = true;
+    public bool showLoadingPanel = true;    
+
     [Header("status显示")]
     public Text statusText; // 在Inspector中拖拽Text控件到这里
     public float updateInterval = 1.0f; // 更新间隔（秒）
@@ -64,12 +68,52 @@ public class GameMgr : MonoBehaviour
         }
 
         // 初始化
-
+        Debug.Log($"初始化游戏系统（主面板显示、bgm及音效挂载、FPS显示）……\n realtimeSinceStartup:{Time.realtimeSinceStartup:F2}秒");
+        InitializeGameSystems();
+        Debug.Log($"初始化游戏系统完成！\nrealtimeSinceStartup:{Time.realtimeSinceStartup:F2}秒");
     }
-
     void Start()
     {
-        // UIManager.Instance.OpenPanel(UIPanel.MainPanel);
+        // 预加载游戏数据
+        StartCoroutine(PreloadGameData());        
+    }
+    private IEnumerator PreloadGameData()
+    {
+        if (!preloadWeaponData) yield break;
+
+        if (showLoadingPanel)
+        {
+            LoadingPanel.Show("游戏数据初始化中……");
+            yield return null; // 让UI先更新一帧
+        }
+
+        // 预加载武器数据
+        Debug.Log($"开始预加载武器数据……\n realtimeSinceStartup:{Time.realtimeSinceStartup:F2}秒");
+        float startTime = Time.realtimeSinceStartup;
+
+        // PackageWeaponData.Preload();
+        // yield return PackageWeaponData.PreloadAsync();
+        // 使用带进度条信息的异步预加载
+        yield return PackageWeaponData.Preload03Async(progress =>
+        {
+            if (showLoadingPanel)
+            {
+                // LoadingPanel.SetProgress(progress);
+                LoadingPanel.SetProgress(progress,$"加载武器数据:");
+            }
+        });
+
+        float loadTime = Time.realtimeSinceStartup - startTime;
+        Debug.Log($"武器数据加载耗时: {loadTime:F2}秒");
+
+        if (showLoadingPanel)
+        {
+            LoadingPanel.Hide();
+        }
+        Debug.Log("数据预加载完成！LoadingPanel已关闭");
+    }
+    private void InitializeGameSystems()
+    {       
         MainPanel.ShowMe();
 
         EventBagOpen += SetCatDanceAnimation;
@@ -80,7 +124,7 @@ public class GameMgr : MonoBehaviour
 
         if (statusText == null)
         {
-            Debug.LogError("statsText is not assigned in GameMgr.");
+            Debug.LogWarning("statsText is not assigned in GameMgr.");
             return;
         }
         StartCoroutine(UpdateFPS());
@@ -120,7 +164,10 @@ public class GameMgr : MonoBehaviour
         // sb.AppendLine($"Draw Calls: {drawCalls}");
         // sb.AppendLine($"Memory: {usedMemory}MB / {totalMemory}MB");
 
-        statusText.text = sb.ToString();
+        if(statusText != null)
+        {
+            statusText.text = sb.ToString();
+        }
     }
     IEnumerator UpdateFPS()
     {

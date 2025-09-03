@@ -27,71 +27,40 @@ public class RXPanelView : MonoBehaviour
 
     void Awake()
     {
-        // 挂载检查:物品数量显示
-        if (txtTotalNum == null)
-        {
-            txtTotalNum = transform.Find("txtTotalNum")?.GetComponent<Text>();
-        }
-        if (txtTotalNum == null)
-        {
-            Debug.LogError("txtTotalNum 未挂载且未找到");
-        }
+        // 使用工具方法检查所有Text组件
+        CheckComponent(ref txtTotalNum, "txtTotalNum");
+        CheckComponent(ref txtConfigID, "Desc/txtConfigID");
+        CheckComponent(ref txtName, "Desc/txtName");
+        CheckComponent(ref txtWeaponQulity, "Desc/txtWeaponQulity");
+        CheckComponent(ref txtBuff, "Desc/txtBuff");
+        CheckComponent(ref txtDesc, "Desc/DescArea/txtDesc");
 
-        // 挂载检查:Detail栏
-        if (txtConfigID == null)
-        {
-            txtConfigID = transform.Find("Desc/txtConfigID")?.GetComponent<Text>();
-        }
-        if (txtConfigID == null)
-        {
-            Debug.LogError("txtConfigID 未挂载且未找到");
-        }
-        if (txtName == null)
-        {
-            txtName = transform.Find("Desc/txtName")?.GetComponent<Text>();
-        }
-        if (txtName == null)
-        {
-            Debug.LogError("txtName 未挂载且未找到");
-        }
-        if (txtWeaponQulity == null)
-        {
-            txtWeaponQulity = transform.Find("Desc/txtWeaponQulity")?.GetComponent<Text>();
-        }
-        if (txtWeaponQulity == null)
-        {
-            Debug.LogError("txtWeaponQulity 未挂载且未找到");
-        }
-        if (txtBuff == null)
-        {
-            txtBuff = transform.Find("Desc/txtBuff")?.GetComponent<Text>();
-        }
-        if (txtBuff == null)
-        {
-            Debug.LogError("txtBuff 未挂载且未找到");
-        }
-        if (txtDesc == null)
-        {
-            txtDesc = transform.Find("Desc/DescArea/txtDesc")?.GetComponent<Text>();
-        }
-        if (txtDesc == null)
-        {
-            Debug.LogError("txtDesc 未挂载且未找到");
-        }
-
+        // 检查其他重要组件
         // 挂载检查:滚动列表相关
         //     路径太长懒得Find了，记得手动挂上
-        if (scrollRect == null)
+        CheckCriticalComponent(scrollRect, "scrollRect");
+        CheckCriticalComponent(contentRect, "contentRect");
+        CheckCriticalComponent(BagRect, "BagRect");
+    }
+    // 通用的组件检查方法
+    private void CheckComponent(ref Text component, string path)
+    {
+        if (component == null)
         {
-            Debug.LogError("scrollRect 未挂载");
+            component = transform.Find(path)?.GetComponent<Text>();
+            if (component == null)
+            {
+                Debug.LogWarning($"{path} 未挂载且未找到对应组件，请确认路径是否正确");
+            }
         }
-        if (contentRect == null)
+    }
+
+    // 关键组件的严格检查
+    private void CheckCriticalComponent<T>(T component, string componentName) where T : Component
+    {
+        if (component == null)
         {
-            Debug.LogError("contentRect 未挂载");
-        }
-        if (BagRect == null)
-        {
-            Debug.LogError("BagRect 未挂载");
+            Debug.LogError($"{componentName} 未挂载，请在Inspector中手动挂载！");
         }
     }
 }

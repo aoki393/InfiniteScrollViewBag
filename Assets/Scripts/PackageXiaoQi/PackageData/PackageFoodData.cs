@@ -128,4 +128,8 @@ public class PackageFoodItem : IPackageItem
 
     //     return result;
     // }
+    override public string ToString() // 仅用于测试时输出到控制台
+    {
+        return string.Format("name: {0}, id: {1}, count: {2}", this.Name, this.id, this.count);
+    }
 }

@@ -17,13 +17,8 @@ public enum PackageItemsSortType
 public class PackageRXController : MonoBehaviour
 {
     private static PackageRXController _instance;
-    public static PackageRXController Instance
-    {
-        get
-        {
-            return _instance;
-        }
-    }
+    public static PackageRXController Instance => _instance;
+
     public RXPanelView view; // public 出来给GM调用
     [SerializeField]
     private float cellHeight;
@@ -75,9 +70,11 @@ public class PackageRXController : MonoBehaviour
             GameObject obj = Instantiate(Resources.Load<GameObject>(UIPanelConst.PanelPaths[UIPanel.PackagePanel_RX]),
                             GameObject.Find("Canvas").transform);
             _instance = obj.GetComponent<PackageRXController>();
+
+            // 确保背包面板显示在第二层，不会把第一层的GMPanel挡住
+            _instance.transform.SetSiblingIndex(PanelSiblingIndex.PanelSiblingIndexDict[UIPanel.PackagePanel_RX]);
         }
-        // 确保背包面板显示在第二层，不会把第一层的GMPanel挡住
-        _instance.transform.SetSiblingIndex(PanelSiblingIndex.PanelSiblingIndexDict[UIPanel.PackagePanel_RX]);
+        
         _instance.gameObject.SetActive(true);
     }
     public static void HideMe()
@@ -99,7 +96,20 @@ public class PackageRXController : MonoBehaviour
         SetContentHeight(maxShowCellNum);
         InitBagCell(view.contentRect);
 
-        // clickItemAction += OnClickItemAction;
+        // LoadingPanel.Show("武器数据加载中...");
+        // StartCoroutine(LoadingTest());
+    }
+    // Start is called before the first frame update
+    void Start()
+    {        
+        // 刷新背包列表显示
+        RefreshBagIniteView(PackageWeaponData.Instance.WeaponList);
+        
+    }
+    IEnumerator LoadingTest()
+    {
+        yield return new WaitForSeconds(2);
+        LoadingPanel.Hide();
     }
 
     private void OnSortChanged(int tabIndex, PackageItemsSortType sortType)
@@ -134,13 +144,6 @@ public class PackageRXController : MonoBehaviour
                 RefreshBagIniteView(PackageFoodData.Instance.FoodList);
                 break;
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        // 刷新背包列表显示
-        RefreshBagIniteView(PackageWeaponData.Instance.WeaponList);
     }
     
     // public 出来只是给 GM面板用

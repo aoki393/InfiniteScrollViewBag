@@ -1,11 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MainPanel : MonoBehaviour
-{    public Button btnPackage;
+{    public Button btnOpenBag;
     public Button btnGM;
+    public Button btnLoading;
     private static MainPanel _instance = null;
     public static MainPanel Instance
     {
@@ -32,13 +34,25 @@ public class MainPanel : MonoBehaviour
     }
     void Start()
     {
-        btnPackage.onClick.AddListener(() =>
+        btnOpenBag.onClick.AddListener(() =>
         {
             GameMgr.Instance.OpenClosePackageRX();
         });
         btnGM.onClick.AddListener(() =>
         {
             GameMgr.Instance.OpenCloseGMPanel();
+        });
+        btnLoading.onClick.AddListener(() =>
+        {            
+            var data = PackageWeaponData.Instance;
+            if (data.WeaponList.Count > 0)
+            {
+                Debug.Log(data.WeaponList[0].ToString());
+            }
+            else
+            {
+                Debug.Log("武器列表为空");
+            }
         });
     }
 
