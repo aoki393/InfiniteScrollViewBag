@@ -76,25 +76,42 @@ UML图
 提供全局的背包和GM面板开关功能
 
 **🎒 背包系统模块 (PackageRX)**  
-PackageRXController: 背包核心逻辑，处理物品显示、排序、选择  
-RXPanelView: 背包UI组件引用管理  
-BagItemVC: 单个背包物品的视图控制器  
-TabGroup: 标签页管理，支持武器/食物分类和排序
+
+| 类名| 主要职责 |
+|---------------------|---------------------|
+| PackageRXController | 背包核心逻辑，处理物品显示、排序、选择 |
+| RXPanelView         | 背包UI组件引用管理                     |
+| BagItemVC           | 单个背包物品的视图控制器               |
+| TabGroup            | 标签页管理，支持武器/食物分类和排序     |
 
 **🛠️ GM工具模块 (GMPanel)**  
-GMPanelController: GM命令处理，物品生成和清除  
-GMPanelView: GM面板UI组件管理  
+
+| 类名| 主要职责 |
+|---------------------|---------------------|
+| GMPanelController   | GM命令处理，物品生成和清除 |
+| GMPanelView         | GM面板UI组件管理 |
+
 支持按ID获取物品、批量生成、数据清除等功能
 
 **📊 数据管理模块**  
-配置数据: WeaponConfig/FoodConfig 定义物品基础属性  
-背包数据: PackageWeaponData/PackageFoodData 管理玩家拥有的物品  
+
+| 类名| 主要职责 |
+|---------------------|---------------------|
+| WeaponConfig        | 武器配置数据类，定义武器属性 |
+| FoodConfig          | 食物配置数据类，定义食物属性 |
+| PackageWeaponData   | 武器背包数据类，管理玩家拥有的武器 |
+| PackageFoodData     | 食物背包数据类，管理玩家拥有的食物 |
+| IPackageItem        | 背包数据类接口，定义物品基础属性和方法 |
+  
 接口设计: IPackageItem 统一物品接口，支持多态处理  
 
 **🗄️Json管理与解析模块**  
-JsonMgr：单例，负责序列化和反序列化  
-Json.ConfigLoader：配置文件加载器，支持异步加载和分帧解析。  
-Json.LitJson：第三方JSON解析库
+
+| 类名| 主要职责 |
+|---------------------|---------------------|
+| JsonMgr             | 单例，负责序列化和反序列化 |
+| ConfigLoader   | 配置文件加载器，支持异步加载和分帧解析。 |
+| LitJson        | 第三方JSON解析库 |
 
 ## 遇到的问题与解决
 
@@ -112,6 +129,10 @@ Json.LitJson：第三方JSON解析库
 - Cell 位置和数据动态更新  
   - GetCellPos(index) 计算每个 Cell 的坐标，实现网格布局。
   - UpdateCell 更新 Cell 的选中状态和显示内容。
+
+本项目中根据数学原理编写代码实现，但也有第三方的工具已经实现了类似功能，例如：[LoopScrollRect](https://github.com/qiankanglai/LoopScrollRect)
+，[InfinityScroll](https://github.com/ivomarel/InfinityScroll)  
+[LoopScrollRect 使用步骤讲解](https://www.bilibili.com/opus/945842624310280210)
 
 ### 2、物品生成耗时过长
 
